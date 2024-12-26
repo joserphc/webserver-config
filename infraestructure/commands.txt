@@ -1,10 +1,39 @@
+####
+
+Imagen Docker
+
+###
+
+1. Autenticar Docker con ECR:
+
+aws ecr get-login-password --region <tu-region> | docker login --username AWS --password-stdin <tu-cuenta-aws>.dkr.ecr.<tu-region>.amazonaws.com
+
+2. Construir la imagen de Docker:
+
+docker build -t <nombre-de-tu-repositorio-ecr>:<etiqueta> .
+
+3. Etiquetar la imagen de Docker:
+
+docker tag <nombre-de-tu-repositorio-ecr>:<etiqueta> <tu-cuenta-aws>.dkr.ecr.<tu-region>.amazonaws.com/<nombre-de-tu-repositorio-ecr>:<etiqueta>
+
+4. Subir la imagen a ECR:
+
+docker push <tu-cuenta-aws>.dkr.ecr.<tu-region>.amazonaws.com/<nombre-de-tu-repositorio-ecr>:<etiqueta>
+
+####
+
+Despliegues de Kubernetes
+
+####
+
 aws eks update-kubeconfig --region us-east-1 --name eks-cluster
 
-
-kubectl apply -f deployment.yml
-kubectl apply -f service.yml
+kubectl apply -f infraestructure/deployment.yml
+kubectl apply -f infraestructure/service.yml
+kubectl apply -f infraestructure/nginx-ingress.yml
 
 kubectl get service nginx-service
 
-kubectl delete -f service.yml
-kubectl delete -f deployment.yml
+kubectl delete -f infraestructure/service.yml
+kubectl delete -f infraestructure/deployment.yml
+kubectl delete -f infraestructure/nginx-ingress.yml
